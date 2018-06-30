@@ -11,20 +11,22 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err){
     if(err) throw err;
-    console.log("you connected mayyne");
+    console.log("\nWelcome to Bamazon! \n");
     showProducts();
 })
 
 function showProducts(){
     connection.query("SELECT * FROM products", function(err, res){
         for(var i = 0; i < res.length; i++){
-            console.log(res[i].item_id + " - " + res[i].product_name + " : $" + res[i].price )
-            
-        }
+           
+            console.log(res[i].item_id + " - " + res[i].product_name + " : $" + res[i].price)
 
+
+        }
+        console.log("\n");
         inquirer.prompt([{
             name: "id",
-            message: "Type in the id number of the product you'd like to buy..."
+            message: "Type in the ID number of the product you'd like to buy..."
             },{
             name: "amProduct",
             message: "How many do you want?"
@@ -39,6 +41,10 @@ function showProducts(){
                             console.log("____________________________________");
                             showProducts();
                         }else{
+                            
+                            console.log("\n");
+
+                            console.log("OK so you want " + answers.amProduct + " " + res[0].product_name + "(s)\n");
                              var newStock = res[0].stock_quantity - answers.amProduct;
                             connection.query(
                             "UPDATE products SET ? WHERE ?", [
@@ -48,7 +54,7 @@ function showProducts(){
                                 {
                                     item_id: answers.id
                                 }], function(err, res){
-                                    console.log("Thanks")
+                                    console.log("\nThanks have a nice day!")
                                    }
                             );
                             console.log("Your total amount is: $" + moneyCount);
